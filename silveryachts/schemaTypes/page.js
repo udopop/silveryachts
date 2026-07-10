@@ -18,10 +18,27 @@ export default {
       },
     },
     {
+      name: 'heroImage',
+      type: 'image',
+      title: 'Hero Background Image',
+      options: { hotspot: true }
+    },
+    {
+      name: 'heroSubtitle',
+      type: 'string',
+      title: 'Hero Subtitle'
+    },
+    {
       name: 'content',
+      type: 'text', // Umgestellt auf 'text' für einfache Absätze ohne Object-Fehler
+      title: 'Content Text',
+      description: 'Main text content for the page'
+    },
+    {
+      name: 'pageImages',
       type: 'array',
-      title: 'Content',
-      of: [{ type: 'block' }] // Allows rich text, paragraphs, headings
+      title: 'Page Gallery / Images',
+      of: [{ type: 'image', options: { hotspot: true } }]
     }
   ]
 }
