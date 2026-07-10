@@ -1,4 +1,3 @@
----
 /**
  * MainLayout.astro — SilverYachts
  * -------------------------------------------------------------
@@ -6,10 +5,10 @@
  * Yacht-Baureihen), <slot /> für den Seiteninhalt und Footer.
  *
  * Menüstruktur orientiert an silveryachts.com:
- *   HOME
- *   SILVERCATS  → 22M / 24M / 29.5M Silver Adventure / 36M Reduce / 39.5M Silver Adventure
- *   YACHTS      → Bold / Silverfast
- *   CONTACT
+ * HOME
+ * SILVERCATS  → 22M / 24M / 29.5M Silver Adventure / 36M Reduce / 39.5M Silver Adventure
+ * YACHTS      → Bold / Silverfast
+ * CONTACT
  *
  * Styling: modernes, scoped CSS (Custom Properties, clamp(), CSS-Nesting)
  * — bewusst ohne Tailwind, damit die Datei als eigenständige
@@ -50,7 +49,7 @@ const yachts = [
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" type="image/svg+xml" href="/silveryacht_V_logo_white.svg" />
 		<meta name="description" content={description} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
@@ -58,8 +57,6 @@ const yachts = [
 		<meta name="generator" content={Astro.generator} />
 		<title>{title} · SilverYachts</title>
 
-		<!-- Fonts: Big Shoulders Display (Display / technisch-industriell),
-		     Inter (Fließtext), IBM Plex Mono (Spec-/Datenwerte) -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
@@ -74,9 +71,8 @@ const yachts = [
 		<header class="site-header">
 			<nav class="nav" aria-label="Hauptnavigation">
 				<a href="/" class="brand" aria-label="SilverYachts — Startseite">
-					<!-- TODO: Logo einfügen. Bis dahin dient der Wortmark-Fallback als Platzhalter. -->
 					<img
-						src="/logo-silveryachts.svg"
+						src="/silveryacht_logo_white.svg"
 						alt="SilverYachts"
 						class="brand-mark"
 						width="180"
@@ -137,9 +133,8 @@ const yachts = [
 		<footer class="site-footer">
 			<div class="footer-grid">
 				<div class="footer-brand">
-					<!-- TODO: Logo (helle Variante) einfügen -->
 					<img
-						src="/logo-silveryachts-white.svg"
+						src="/silveryacht_logo_white.svg"
 						alt="SilverYachts"
 						class="brand-mark"
 						width="200"
