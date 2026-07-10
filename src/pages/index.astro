@@ -1,17 +1,14 @@
 ---
-
+import MainLayout from '../layouts/MainLayout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<MainLayout title="Welcome">
+  <section style="padding: 8rem 2rem; text-align: center; max-width: 800px; margin: 0 auto;">
+    <h1 style="font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 4.5rem); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.5rem;">
+      The Future of Luxury Yachting
+    </h1>
+    <p style="color: var(--silver); line-height: 1.6; font-size: 1.1rem;">
+      Willkommen auf der neuen, statischen SilverYachts-Plattform. Schnell, sicher und elegant.
+    </p>
+  </section>
+</MainLayout>

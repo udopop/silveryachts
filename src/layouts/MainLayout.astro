@@ -1,0 +1,656 @@
+---
+/**
+ * MainLayout.astro — SilverYachts
+ * -------------------------------------------------------------
+ * Grundgerüst mit sticky Navigation (inkl. Dropdowns für die
+ * Yacht-Baureihen), <slot /> für den Seiteninhalt und Footer.
+ *
+ * Menüstruktur orientiert an silveryachts.com:
+ *   HOME
+ *   SILVERCATS  → 22M / 24M / 29.5M Silver Adventure / 36M Reduce / 39.5M Silver Adventure
+ *   YACHTS      → Bold / Silverfast
+ *   CONTACT
+ *
+ * Styling: modernes, scoped CSS (Custom Properties, clamp(), CSS-Nesting)
+ * — bewusst ohne Tailwind, damit die Datei als eigenständige
+ * Drop-in-Komponente ohne zusätzliche Build-Konfiguration funktioniert.
+ * Ein Tailwind-Pendant lässt sich bei Bedarf 1:1 aus den Tokens unten ableiten.
+ */
+
+export interface Props {
+	title: string;
+	description?: string;
+	ogImage?: string;
+}
+
+const {
+	title,
+	description = "SilverYachts — Built to go fast, travel far and explore the shallows where others can't follow.",
+	ogImage = "/og-image.jpg",
+} = Astro.props;
+
+// Modell-Daten für die Dropdowns. Längen sind echte Spec-Werte,
+// nicht dekorative Nummerierung — passend zum Marken-Signature-Element.
+const silvercats = [
+	{ name: "REDUCE", length: "36M", href: "/reduce" },
+	{ name: "Silvercat", length: "24M", href: "/silvercats/24m-silvercat" },
+	{ name: "Silver Adventure", length: "29.5M", href: "/silvercats/29-5m-silver-adventure" },
+	{ name: "Reduce", length: "36M", href: "/silvercats/36m-reduce" },
+	{ name: "Silver Adventure", length: "39.5M", href: "/silvercats/39-5m-silver-adventure" },
+];
+
+const yachts = [
+	{ name: "Bold", length: "85M", href: "/bold" },
+	{ name: "Silverfast", length: "", href: "/yachts/silverfast" },
+];
+---
+
+<!doctype html>
+<html lang="de">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="description" content={description} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={ogImage} />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title} · SilverYachts</title>
+
+		<!-- Fonts: Big Shoulders Display (Display / technisch-industriell),
+		     Inter (Fließtext), IBM Plex Mono (Spec-/Datenwerte) -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+		/>
+	</head>
+
+	<body>
+		<a href="#main-content" class="skip-link">Zum Inhalt springen</a>
+
+		<header class="site-header">
+			<nav class="nav" aria-label="Hauptnavigation">
+				<a href="/" class="brand" aria-label="SilverYachts — Startseite">
+					<!-- TODO: Logo einfügen. Bis dahin dient der Wortmark-Fallback als Platzhalter. -->
+					<img
+						src="/logo-silveryachts.svg"
+						alt="SilverYachts"
+						class="brand-mark"
+						width="180"
+						height="32"
+						onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';"
+					/>
+					<span class="brand-fallback" style="display:none;">SILVER<span>YACHTS</span></span>
+				</a>
+
+				<input type="checkbox" id="nav-toggle" class="nav-toggle-input" />
+				<label for="nav-toggle" class="nav-toggle-label" aria-label="Menü öffnen/schließen">
+					<span></span><span></span><span></span>
+				</label>
+
+				<ul class="nav-menu">
+					<li><a href="/">Home</a></li>
+
+					<li class="has-dropdown">
+						<details class="dropdown">
+							<summary>Silvercats</summary>
+							<ul class="dropdown-panel">
+								{silvercats.map((model) => (
+									<li>
+										<a href={model.href}>
+											<span class="model-name">{model.name}</span>
+											<span class="model-length">{model.length}</span>
+										</a>
+									</li>
+								))}
+							</ul>
+						</details>
+					</li>
+
+					<li class="has-dropdown">
+						<details class="dropdown">
+							<summary>Yachts</summary>
+							<ul class="dropdown-panel">
+								{yachts.map((model) => (
+									<li>
+										<a href={model.href}>
+											<span class="model-name">{model.name}</span>
+										</a>
+									</li>
+								))}
+							</ul>
+						</details>
+					</li>
+
+					<li><a href="/contact">Contact</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="main-content">
+			<slot />
+		</main>
+
+		<footer class="site-footer">
+			<div class="footer-grid">
+				<div class="footer-brand">
+					<!-- TODO: Logo (helle Variante) einfügen -->
+					<img
+						src="/logo-silveryachts-white.svg"
+						alt="SilverYachts"
+						class="brand-mark"
+						width="200"
+						height="36"
+						onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';"
+					/>
+					<span class="brand-fallback" style="display:none;">SILVER<span>YACHTS</span></span>
+					<p class="tagline">
+						Built to go fast, travel far and explore the shallows where others can't follow.
+					</p>
+					<a
+						href="https://www.instagram.com/silveryachts/"
+						class="social-link"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Instagram ↗
+					</a>
+				</div>
+
+				<nav class="footer-col" aria-label="Navigation">
+					<h2>Navigation</h2>
+					<ul>
+						<li><a href="/">Home</a></li>
+						<li><a href="/silvercats">Silvercats</a></li>
+						<li><a href="/yachts">Yachts</a></li>
+						<li><a href="/contact">Contact</a></li>
+					</ul>
+				</nav>
+
+				<nav class="footer-col" aria-label="Modelle">
+					<h2>Modelle</h2>
+					<ul>
+						{[...silvercats, ...yachts].map((model) => (
+							<li>
+								<a href={model.href}>
+									{model.name}{model.length ? ` ${model.length}` : ""}
+								</a>
+							</li>
+						))}
+					</ul>
+				</nav>
+
+				<div class="footer-col">
+					<h2>Offices</h2>
+					<ul class="offices">
+						<li>Monaco</li>
+						<li>Western Australia</li>
+						<li>Guangdong, P.R.C.</li>
+					</ul>
+					<a href="mailto:info@silveryachts.com" class="footer-contact">info@silveryachts.com</a>
+				</div>
+			</div>
+
+			<div class="footer-bottom">
+				<p>© {new Date().getFullYear()} SilverYachts. Alle Rechte vorbehalten.</p>
+				<ul class="legal-links">
+					<li><a href="/privacy">Privacy</a></li>
+					<li><a href="/imprint">Imprint</a></li>
+				</ul>
+			</div>
+		</footer>
+	</body>
+</html>
+
+<style>
+	:root {
+		--navy-950: #070d16;
+		--navy-900: #0d1a2b;
+		--navy-800: #14293f;
+		--navy-700: #1d3a5b;
+		--white-elegant: #f6f7f8;
+		--silver: #a9b6c1;
+		--silver-bright: #dde3e8;
+		--silver-line: rgba(169, 182, 193, 0.16);
+
+		--font-display: "Big Shoulders Display", sans-serif;
+		--font-body: "Inter", sans-serif;
+		--font-mono: "IBM Plex Mono", monospace;
+
+		--nav-height: 84px;
+	}
+
+	:global(html) {
+		background: var(--navy-950);
+		scroll-behavior: smooth;
+	}
+
+	:global(body) {
+		margin: 0;
+		background: var(--navy-950);
+		color: var(--white-elegant);
+		font-family: var(--font-body);
+		-webkit-font-smoothing: antialiased;
+	}
+
+	:global(*:focus-visible) {
+		outline: 2px solid var(--silver-bright);
+		outline-offset: 3px;
+	}
+
+	.skip-link {
+		position: absolute;
+		left: -9999px;
+		top: 0;
+		z-index: 1000;
+		background: var(--navy-900);
+		color: var(--white-elegant);
+		padding: 0.75rem 1.25rem;
+		border: 1px solid var(--silver-line);
+	}
+	.skip-link:focus {
+		left: 1rem;
+		top: 1rem;
+	}
+
+	/* ---------- Navigation ---------- */
+
+	.site-header {
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		height: var(--nav-height);
+		background: color-mix(in srgb, var(--navy-900) 82%, transparent);
+		backdrop-filter: blur(14px) saturate(140%);
+		border-bottom: 1px solid var(--silver-line);
+	}
+
+	.nav {
+		max-width: 1440px;
+		height: 100%;
+		margin: 0 auto;
+		padding: 0 clamp(1.25rem, 4vw, 3rem);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 2rem;
+	}
+
+	.brand {
+		display: inline-flex;
+		align-items: center;
+		text-decoration: none;
+		flex-shrink: 0;
+	}
+	.brand-mark {
+		height: 28px;
+		width: auto;
+		display: block;
+	}
+	.brand-fallback {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 1.15rem;
+		letter-spacing: 0.32em;
+		color: var(--white-elegant);
+		display: inline-flex;
+	}
+	.brand-fallback span {
+		color: var(--silver);
+		margin-left: 0.32em;
+	}
+
+	.nav-toggle-input,
+	.nav-toggle-label {
+		display: none;
+	}
+
+	.nav-menu {
+		display: flex;
+		align-items: center;
+		gap: clamp(1.25rem, 2.5vw, 2.75rem);
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		height: 100%;
+	}
+
+	.nav-menu > li {
+		height: 100%;
+		display: flex;
+		align-items: center;
+		position: relative;
+	}
+
+	.nav-menu > li > a {
+		color: var(--silver-bright);
+		text-decoration: none;
+		font-size: 0.78rem;
+		font-weight: 500;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		padding: 0.4rem 0;
+		position: relative;
+		transition: color 0.2s ease;
+	}
+	.nav-menu > li > a::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		bottom: -2px;
+		width: 100%;
+		height: 1px;
+		background: var(--silver-bright);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.25s ease;
+	}
+	.nav-menu > li > a:hover,
+	.nav-menu > li > a:focus-visible {
+		color: var(--white-elegant);
+	}
+	.nav-menu > li > a:hover::after,
+	.nav-menu > li > a:focus-visible::after {
+		transform: scaleX(1);
+	}
+
+	/* Dropdowns via <details>/<summary>: nativ zugänglich, funktioniert
+	   ohne JavaScript per Klick/Tap auf Desktop wie Mobile. */
+	.dropdown {
+		height: 100%;
+		display: flex;
+		align-items: center;
+	}
+	.dropdown summary {
+		list-style: none;
+		cursor: pointer;
+		color: var(--silver-bright);
+		font-size: 0.78rem;
+		font-weight: 500;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		transition: color 0.2s ease;
+	}
+	.dropdown summary::-webkit-details-marker {
+		display: none;
+	}
+	.dropdown summary::after {
+		content: "";
+		width: 6px;
+		height: 6px;
+		border-right: 1px solid currentColor;
+		border-bottom: 1px solid currentColor;
+		transform: rotate(45deg);
+		transition: transform 0.2s ease;
+		margin-top: -2px;
+	}
+	.dropdown[open] summary::after {
+		transform: rotate(-135deg);
+		margin-top: 2px;
+	}
+	.dropdown:hover summary,
+	.dropdown summary:focus-visible {
+		color: var(--white-elegant);
+	}
+
+	.dropdown-panel {
+		position: absolute;
+		top: calc(var(--nav-height) - 1px);
+		left: 0;
+		min-width: 280px;
+		margin: 0;
+		padding: 0.5rem;
+		list-style: none;
+		background: var(--navy-800);
+		border: 1px solid var(--silver-line);
+		box-shadow: 0 24px 48px -20px rgba(0, 0, 0, 0.6);
+	}
+	.dropdown-panel a {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 0.65rem 0.75rem;
+		color: var(--white-elegant);
+		text-decoration: none;
+		font-size: 0.9rem;
+		border-left: 1px solid transparent;
+		transition: border-color 0.2s ease, background 0.2s ease;
+	}
+	.dropdown-panel a:hover,
+	.dropdown-panel a:focus-visible {
+		background: color-mix(in srgb, var(--navy-700) 60%, transparent);
+		border-left-color: var(--silver-bright);
+	}
+	.model-length {
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		letter-spacing: 0.04em;
+		color: var(--silver);
+		background: var(--navy-900);
+		border: 1px solid var(--silver-line);
+		padding: 0.15rem 0.5rem;
+		flex-shrink: 0;
+	}
+
+	/* ---------- Footer ---------- */
+
+	.site-footer {
+		border-top: 1px solid var(--silver-line);
+		background: var(--navy-950);
+		padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 4vw, 3rem) 1.5rem;
+	}
+
+	.footer-grid {
+		max-width: 1440px;
+		margin: 0 auto;
+		display: grid;
+		grid-template-columns: 1.6fr 1fr 1fr 1fr;
+		gap: clamp(2rem, 4vw, 3rem);
+		padding-bottom: clamp(2.5rem, 5vw, 3.5rem);
+	}
+
+	.footer-brand .brand-mark {
+		height: 26px;
+		margin-bottom: 1.25rem;
+	}
+	.footer-brand .tagline {
+		max-width: 30ch;
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+		line-height: 1.35;
+		color: var(--silver-bright);
+		margin: 0 0 1.5rem;
+	}
+	.social-link {
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		letter-spacing: 0.05em;
+		color: var(--silver);
+		text-decoration: none;
+	}
+	.social-link:hover {
+		color: var(--white-elegant);
+	}
+
+	.footer-col h2 {
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--silver);
+		font-weight: 500;
+		margin: 0 0 1.1rem;
+	}
+	.footer-col ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.65rem;
+	}
+	.footer-col a {
+		color: var(--silver-bright);
+		text-decoration: none;
+		font-size: 0.9rem;
+		transition: color 0.2s ease;
+	}
+	.footer-col a:hover,
+	.footer-col a:focus-visible {
+		color: var(--white-elegant);
+	}
+	.offices li {
+		color: var(--silver-bright);
+		font-size: 0.9rem;
+	}
+	.footer-contact {
+		display: inline-block;
+		margin-top: 1rem;
+		font-family: var(--font-mono);
+		font-size: 0.82rem;
+	}
+
+	.footer-bottom {
+		max-width: 1440px;
+		margin: 0 auto;
+		border-top: 1px solid var(--silver-line);
+		padding-top: 1.5rem;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		letter-spacing: 0.03em;
+		color: var(--silver);
+	}
+	.footer-bottom p {
+		margin: 0;
+	}
+	.legal-links {
+		list-style: none;
+		display: flex;
+		gap: 1.5rem;
+		margin: 0;
+		padding: 0;
+	}
+	.legal-links a {
+		color: var(--silver);
+		text-decoration: none;
+	}
+	.legal-links a:hover {
+		color: var(--white-elegant);
+	}
+
+	/* ---------- Responsive / Mobile Navigation ---------- */
+
+	@media (max-width: 900px) {
+		.nav-toggle-label {
+			display: inline-flex;
+			flex-direction: column;
+			justify-content: center;
+			gap: 5px;
+			width: 28px;
+			height: 20px;
+			cursor: pointer;
+			z-index: 20;
+		}
+		.nav-toggle-label span {
+			display: block;
+			height: 1px;
+			background: var(--silver-bright);
+			transition: transform 0.25s ease, opacity 0.25s ease;
+		}
+
+		.nav-menu {
+			position: fixed;
+			inset: var(--nav-height) 0 0 0;
+			height: auto;
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: flex-start;
+			gap: 0;
+			padding: 1rem clamp(1.25rem, 6vw, 2rem) 2rem;
+			background: var(--navy-900);
+			border-top: 1px solid var(--silver-line);
+			transform: translateY(-8px);
+			opacity: 0;
+			visibility: hidden;
+			transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+			overflow-y: auto;
+		}
+		.nav-menu > li {
+			width: 100%;
+			height: auto;
+			flex-direction: column;
+			align-items: stretch;
+			border-bottom: 1px solid var(--silver-line);
+		}
+		.nav-menu > li > a {
+			padding: 1rem 0;
+		}
+		.dropdown {
+			width: 100%;
+		}
+		.dropdown summary {
+			padding: 1rem 0;
+			width: 100%;
+			justify-content: space-between;
+		}
+		.dropdown-panel {
+			position: static;
+			min-width: 0;
+			border: none;
+			box-shadow: none;
+			background: transparent;
+			padding: 0 0 0.75rem 0.75rem;
+		}
+
+		.nav-toggle-input:checked ~ .nav-menu {
+			opacity: 1;
+			visibility: visible;
+			transform: translateY(0);
+		}
+		.nav-toggle-input:checked ~ .nav-toggle-label span:nth-child(1) {
+			transform: translateY(6px) rotate(45deg);
+		}
+		.nav-toggle-input:checked ~ .nav-toggle-label span:nth-child(2) {
+			opacity: 0;
+		}
+		.nav-toggle-input:checked ~ .nav-toggle-label span:nth-child(3) {
+			transform: translateY(-6px) rotate(-45deg);
+		}
+
+		.footer-grid {
+			grid-template-columns: 1fr 1fr;
+		}
+		.footer-brand {
+			grid-column: 1 / -1;
+		}
+	}
+
+	@media (max-width: 560px) {
+		.footer-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:global(html) {
+			scroll-behavior: auto;
+		}
+		* {
+			transition-duration: 0.001ms !important;
+			animation-duration: 0.001ms !important;
+		}
+	}
+</style>
