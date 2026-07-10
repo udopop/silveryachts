@@ -1,4 +1,4 @@
 import yacht from './yacht'
-import contact from './contact' // 1. Hier importieren
+import page from './page' // 1. Hier das neue englische Schema importieren
 
-export const schemaTypes = [yacht, contact] // 2. Hier zum Array hinzufügen
+export const schemaTypes = [yacht, page] // 2. Hier zum Array hinzufügen
