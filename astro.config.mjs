@@ -1,8 +1,12 @@
 import { defineConfig } from 'astro/config';
 import sanity from '@sanity/astro';
 
+import vercel from '@astrojs/vercel';
+
 export default defineConfig({
-  output: 'server', // Zwingt Astro dazu, Daten bei jedem Klick live zu laden
+  // Zwingt Astro dazu, Daten bei jedem Klick live zu laden
+  output: 'server',
+
   integrations: [
     sanity({
       projectId: 'zkzyvpej',
@@ -11,4 +15,6 @@ export default defineConfig({
       apiVersion: '2026-07-09',
     }),
   ],
+
+  adapter: vercel(),
 });
