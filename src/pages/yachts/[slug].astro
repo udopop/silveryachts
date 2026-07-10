@@ -1,12 +1,12 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro';
+import MainLayout from '../../layouts/MainLayout.astro';
 import { sanityClient } from 'sanity:client';
 import imageUrlBuilder from '@sanity/image-url';
 
-// 1. Live-Parameter aus der URL auslesen
+// 1. Get the live slug from the URL parameters
 const { slug } = Astro.params;
 
-// 2. Die Yacht live aus Sanity abfragen
+// 2. Fetch the specific yacht from Sanity where the slug matches
 const yacht = await sanityClient.fetch(
   `*[_type == "yacht" && slug.current == $slug][0]`,
   { slug }
@@ -16,7 +16,7 @@ if (!yacht) {
   return Astro.redirect('/404');
 }
 
-// Hilfsfunktion für die Bilder-URLs
+// Helper function for Sanity image URLs
 const builder = imageUrlBuilder(sanityClient);
 function urlFor(source) {
   return builder.image(source);
@@ -29,7 +29,7 @@ function urlFor(source) {
       {yacht.name}
     </h1>
     <p style="color: var(--gold); font-size: 1.5rem; font-weight: 300; margin-bottom: 3rem;">
-      Länge: {yacht.laenge}
+      Length: {yacht.laenge}
     </p>
 
     {yacht.mainImage && (
@@ -46,7 +46,7 @@ function urlFor(source) {
           Specification & Design
         </h2>
         <p style="line-height: 1.8; color: #ccc; font-size: 1.1rem; white-space: pre-line; margin-bottom: 4rem;">
-          {yacht.beschreibung || "Keine Beschreibung hinterlegt."}
+          {yacht.beschreibung || "No specification available."}
         </p>
       </div>
     </div>
@@ -57,10 +57,10 @@ function urlFor(source) {
           Gallery
         </h2>
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
-          {yacht.galerie.map((bild) => (
+          {yacht.galerie.map((image) => (
             <img 
-              src={urlFor(bild).url()} 
-              alt={`Impression von ${yacht.name}`} 
+              src={urlFor(image).url()} 
+              alt={`Impression of ${yacht.name}`} 
               style="width: 100%; height: 220px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(169, 182, 193, 0.2);"
             />
           ))}
