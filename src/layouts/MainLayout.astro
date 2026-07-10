@@ -65,6 +65,8 @@ const allModels = [...silvercats, ...yachts].map(model => {
 		<meta name="generator" content={Astro.generator} />
 		<title>{title} · SilverYachts</title>
 
+		<!-- Fonts: Big Shoulders Display (Display / technisch-industriell),
+		     Inter (Fließtext), IBM Plex Mono (Spec-/Datenwerte) -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
@@ -82,9 +84,9 @@ const allModels = [...silvercats, ...yachts].map(model => {
 					<img
 						src="/silveryacht_logo_white.svg"
 						alt="SilverYachts"
-						class="brand-mark"
-						width="180"
-						height="32"
+						class="brand-mark brand-header-logo"
+						width="360"
+						height="64"
 						onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';"
 					/>
 					<span class="brand-fallback" style="display:none;">SILVER<span>YACHTS</span></span>
@@ -289,9 +291,13 @@ const allModels = [...silvercats, ...yachts].map(model => {
 		flex-shrink: 0;
 	}
 	.brand-mark {
-		height: 28px;
+		height: auto;
 		width: auto;
 		display: block;
+	}
+	.brand-header-logo {
+		max-width: 360px;
+		height: 54px; /* Perfekt ausbalanciert für die 84px hohe Navigationsleiste */
 	}
 	.brand-fallback {
 		font-family: var(--font-display);
@@ -557,6 +563,11 @@ const allModels = [...silvercats, ...yachts].map(model => {
 	/* ---------- Responsive / Mobile Navigation ---------- */
 
 	@media (max-width: 900px) {
+		.brand-header-logo {
+			max-width: clamp(180px, 45vw, 260px);
+			height: auto;
+		}
+
 		.nav-toggle-label {
 			display: inline-flex;
 			flex-direction: column;
