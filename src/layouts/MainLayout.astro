@@ -1,3 +1,4 @@
+---
 /**
  * MainLayout.astro — SilverYachts
  * -------------------------------------------------------------
@@ -13,7 +14,6 @@
  * Styling: modernes, scoped CSS (Custom Properties, clamp(), CSS-Nesting)
  * — bewusst ohne Tailwind, damit die Datei als eigenständige
  * Drop-in-Komponente ohne zusätzliche Build-Konfiguration funktioniert.
- * Ein Tailwind-Pendant lässt sich bei Bedarf 1:1 aus den Tokens unten ableiten.
  */
 
 export interface Props {
@@ -42,6 +42,14 @@ const yachts = [
 	{ name: "Bold", length: "85M", href: "/yachts/bold" },
 	{ name: "Silverfast", length: "", href: "/yachts/silverfast" },
 ];
+
+// Kombiniertes Array für den Footer sicher im Frontmatter aufbereiten
+const allModels = [...silvercats, ...yachts].map(model => {
+	return {
+		href: model.href,
+		displayName: model.length ? `${model.name} ${model.length}` : model.name
+	};
+});
 ---
 
 <!doctype html>
@@ -168,10 +176,10 @@ const yachts = [
 				<nav class="footer-col" aria-label="Modelle">
 					<h2>Modelle</h2>
 					<ul>
-						{[...silvercats, ...yachts].map((model) => (
+						{allModels.map((model) => (
 							<li>
 								<a href={model.href}>
-									{model.name}{model.length ? ` ${model.length}` : ""}
+									{model.displayName}
 								</a>
 							</li>
 						))}
